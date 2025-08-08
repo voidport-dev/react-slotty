@@ -1,19 +1,24 @@
-import { Slot, SlotMachine } from "react-slotty";
-import { useState } from "react";
+import { Slot, SlotMachine, type SlotMachineRef } from "react-slotty";
+import { useRef, useState } from "react";
 import "./App.css";
 import type { FruitItem } from "./types/fruit-item";
 import { slots } from "./slots";
 import { getRarityColor } from "./utils/get-rarity-color";
 
 function App() {
-  const [selectedItem] = useState<FruitItem | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const slotMachineRef = useRef<SlotMachineRef | null>(null);
+  const [selectedItem] = useState<FruitItem | null>(null);
 
   return (
     <main>
       <h1>🎰 React Slotty Demo</h1>
 
-      <SlotMachine className="slot-machine">
+      <SlotMachine
+        className="slot-machine"
+        ref={slotMachineRef}
+        onSpinStateChange={setIsSpinning}
+      >
         {slots.map((slot) => (
           <Slot
             key={slot.id}
@@ -27,7 +32,7 @@ function App() {
 
       <button
         className="spin-button"
-        onClick={() => setIsSpinning(true)}
+        onClick={() => slotMachineRef.current?.spin()}
         disabled={isSpinning}
       >
         {isSpinning ? "Spinning...." : "Spin"}

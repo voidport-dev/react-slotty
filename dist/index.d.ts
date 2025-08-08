@@ -15,7 +15,12 @@ interface SlotMachineProps {
     style?: React__default.CSSProperties;
     [key: string]: any;
 }
-declare const SlotMachine: React__default.FC<SlotMachineProps>;
+interface SlotMachineRef {
+    onSpinStateChange?: (isSpinning: boolean) => void;
+    isSpinning: boolean;
+    spin: () => void;
+}
+declare const SlotMachine: React__default.ForwardRefExoticComponent<Omit<SlotMachineProps, "ref"> & React__default.RefAttributes<SlotMachineRef>>;
 
 interface SlotItem {
     id: string;
@@ -33,4 +38,4 @@ declare const useSlotMachine: () => {
     containerRef: React$1.RefObject<HTMLDivElement | null>;
 };
 
-export { type SelectedItemType, Slot, type SlotItem, SlotMachine, type SlotMachineProps, type SlotProps, type UseSlotMachineProps, useSlotMachine };
+export { type SelectedItemType, Slot, type SlotItem, SlotMachine, type SlotMachineProps, type SlotMachineRef, type SlotProps, type UseSlotMachineProps, useSlotMachine };

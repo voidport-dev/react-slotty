@@ -12,19 +12,35 @@ var Slot = ({
 }) => {
   return /* @__PURE__ */ jsxRuntime.jsx("div", { className, style, ...props, children });
 };
-var SlotMachine = ({
-  children,
-  className,
-  style,
-  ...props
-}) => {
+var SlotMachineRef = ({ onSpinStateChange, className, children, style, ...props }, ref) => {
+  const [isSpinning, setIsSpinning] = react.useState(false);
   const containerStyle = {
     display: "flex",
     gap: "8px",
     ...style
   };
+  react.useImperativeHandle(
+    ref,
+    () => ({
+      spin: () => {
+        console.log("Spinning the slot machine...");
+        setIsSpinning(true);
+        onSpinStateChange?.(true);
+        setTimeout(() => {
+          console.log("Spin completed!");
+          setIsSpinning(false);
+          onSpinStateChange?.(false);
+        }, 500);
+      },
+      get isSpinning() {
+        return isSpinning;
+      }
+    }),
+    [isSpinning]
+  );
   return /* @__PURE__ */ jsxRuntime.jsx("div", { className, style: containerStyle, ...props, children });
 };
+var SlotMachine = react.forwardRef(SlotMachineRef);
 var useSlotMachine = () => {
   const containerRef = react.useRef(null);
   return {
